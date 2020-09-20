@@ -4,3 +4,11 @@ body {
     background-repeat: no-repeat;
     background-size: initial;
 }
+
+/* Footer styling*/
+#footer-container {
+    background-color: #343a40;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
