@@ -24,6 +24,173 @@
     
     </nav>
 
+    <div class="container-fluid h-100">
+      <div class="row min-vh-100">
+        <div class="col-md-4 bg-dark">
+          <div class="row">
+            <div class="col-md-12 py-3" id="current-location-container">
+              <div class="d-flex align-text-middle justify-content-between">
+                <h6 class="mt-2 font-weight-bold">
+                  Current Location Forecast:
+                </h6>
+                <button
+                  class="btn btn-success btn-sm"
+                  id="geolocationBtn"
+                >
+                  <i class="fas fa-map-marker-alt"></i>
+                  Get Location
+                </button>
+              </div>
+              <div
+                class="card text-white bg-secondary mt-3"
+                id="geolocationStatus"
+              >
+                <div class="card-body pt-2">
+                  <h5 class="card-title" id="geolocation"></h5>
+                  <div class="weather-image-container">
+                    <img
+                      alt="image shows a weather symbol for the current geolocation"
+                      id="geolocationImg"
+                    />
+                  </div>
+                  <p class="card-text" id="geolocationTemp"></p>
+                  <p class="card-text" id="geolocationHum"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-8" id="searchDiv">
+              <label class="font-weight-bold text-white pt-2" for="city-search"
+                >Search for a City:</label
+              >
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="searchInput" />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    id="searchBtn"
+                  >
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 h-100 pb-3" id="searchHistoryDiv">
+              <div class="card w-100">
+                <ul
+                  class="list-group list-group-flush"
+                  id="searchHistoryList"
+                ></ul>
+              </div>
+              <div
+                class="d-flex justify-content-end pt-3"
+                id="clearDiv"
+              >
+                <button class="btn btn-danger" id="clearBtn">
+                  Clear History
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 px-4" id="weatherDiv">
+          <div class="row pt-5" id="errorDiv">
+            <h2 class="font-weight-bold text-white" id="errorDisplay">City not found.</h2>
+          </div>
+          <div class="row pt-3" id="todayForecast">
+            <div class="col-md-12 border">
+              <div
+                class="d-flex align-items-center pt-4"
+                id="cityNameDiv"
+              >
+                <h2 class="font-weight-bold text-white" id="cityNameDisplay"></h2>
+                <div class="weather-image-container">
+                  <img alt="shows an image of the weather for the currently selected location" id="weatherImg" />
+                </div>
+              </div>
+              <div class="pb-4" id="todayWeatherDiv">
+                <div id="temp"></div>
+                <div id="humidity"></div>
+                <div id="ws"></div>
+                <div id="uvi"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row flex-column pt-3" id="5dayDiv">
+            <div class="row no-gutters">
+              <h4 class="font-weight-bold text-white">5-Day Forecast:</h4>
+            </div>
+            <div class="row no-gutters">
+              <div class="col-lg mx-1 pb-2">
+                <div class="card text-white bg-info" id="day1">
+                  <div class="card-body">
+                    <h5 class="card-title" id="day1Date"></h5>
+                    <div class="weather-image-container">
+                      <img alt="shows an image for the weather of day 1's forecast" id="day1Img" />
+                    </div>
+                    <p class="card-text" id="day1Temp"></p>
+                    <p class="card-text" id="day1Hum"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg mx-1 pb-2">
+                <div class="card text-white bg-info" id="day2">
+                  <div class="card-body">
+                    <h5 class="card-title" id="day2Date"></h5>
+                    <div class="weather-image-container">
+                      <img alt="shows an image for the weather of day 2's forecast" id="day2Img" />
+                    </div>
+                    <p class="card-text" id="day2Temp"></p>
+                    <p class="card-text" id="day2Hum"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg mx-1 pb-2">
+                <div class="card text-white bg-info" id="day3">
+                  <div class="card-body">
+                    <h5 class="card-title" id="day3Date"></h5>
+                    <div class="weather-image-container">
+                      <img alt="shows an image for the weather of day 3's forecast" id="day3Img" />
+                    </div>
+                    <p class="card-text" id="day3Temp"></p>
+                    <p class="card-text" id="day3Hum"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg mx-1 pb-2">
+                <div class="card text-white bg-info" id="day4">
+                  <div class="card-body">
+                    <h5 class="card-title" id="day4Date"></h5>
+                    <div class="weather-image-container">
+                      <img alt="shows an image for the weather of day 4's forecast" id="day4Img" />
+                    </div>
+                    <p class="card-text" id="day4Temp"></p>
+                    <p class="card-text" id="day4Hum"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg mx-1 pb-2">
+                <div class="card text-white bg-info" id="day5">
+                  <div class="card-body">
+                    <h5 class="card-title" id="day5Date"></h5>
+                    <div class="weather-image-container">
+                      <img alt="shows an image for the weather of day 5's forecast" id="day5Img" />
+                    </div>
+                    <p class="card-text" id="day5Temp"></p>
+                    <p class="card-text" id="day5Hum"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
 
 
     
