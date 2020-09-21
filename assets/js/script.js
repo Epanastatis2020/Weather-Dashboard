@@ -1,8 +1,7 @@
 //Declare global variables here
 const APIkey = '&appid=4d90ce9f0a7bd1882a4f86d3d0c1088b';
 const weatherAPI = 'https://api.openweathermap.org/data/2.5/weather?';
-const uviAPI = 'https://api.openweathermap.org/data/2.5/uvi?lat=';
-const forecastAPI = 'https://api.openweathermap.org/data/2.5/forecast?q=';
+const oneCallAPI = 'https://api.openweathermap.org/data/2.5/onecall?lat=';
 const geoAPI = navigator.geolocation;
 const units = '&units=metric';
 const getWeatherIcon = 'http://openweathermap.org/img/wn/';
@@ -27,7 +26,6 @@ $(document).ready(function() {
 
 //Search function
 function search() {
-    debugger;
     city = $('#searchInput')
         .val()
         .trim();
@@ -43,8 +41,6 @@ function search() {
 
 function retrieveForecast(search) {
     retrieveWeather(search);
-    retrieveUVI(search);
-    retrieve5DayWeather(search);
 }
 
 //Function to retrieve data from Weather API
@@ -69,7 +65,8 @@ function retrieveWeather(search) {
         $('#5dayDiv').show();
 
         let name = response.name;
-        let temp = Math.floor(response.main.temp);
+        let tempMin = Math.floor(response.main.temp_min);
+        let tempMax = Math.floor(response.main.temp_max);
         let hum = response.main.humidity;
         let ws = response.wind.speed;
         let date = new Date(response.dt * 1000).toLocaleDateString('en-AU');
@@ -80,40 +77,71 @@ function retrieveWeather(search) {
 
         $('#cityNameDisplay').text(name + ' (' + date + ') ');
         $('#weatherImg').attr('src', weatherImgURL);
-        $('#temp').html('<b>Temperature: </b>' + temp + ' °C');
+        $('#tempMin').html('<b>Minimum Temperature: </b>' + tempMin + ' °C');
+        $('#tempMax').html('<b>Maximum Temperature: </b>' + tempMax + ' °C');
         $('#hum').html('<b>Humidity: </b>' + hum + '%');
         $('#ws').html('<b>Wind Speed: </b>' + ws + ' km/h');
 
         lat = response.coord.lat;
         lon = response.coord.lon;
+        console.log(lat);
+        console.log(lon);
         cityName = response.name;
         country = response.sys.country;
+        
+        retrieveUVI(search);
+        retrieve5DayWeather(search);
     });
+    
 };
 
 //Function to retrieve data from UVI API
 
-function retrieveUVI (search) {
-    let queryURLforUVI = uviAPI + lat + '&lon=' + lon + APIkey;
+function retrieveUVI () {
+    let queryURLforUVI = oneCallAPI + lat + '&lon=' + lon + APIkey;
 
     $.ajax({
         url: queryURLforUVI,
         method: 'GET'
-    }).then(function(response) {
-        let UVI = response.value;
+    }).then(function(responseUVI) {
+        let UVI = responseUVI.current.uvi;
         $('#uvi').html(
             '<b>UV Index: <b>' + '<span class="badge badge-pill badge-info">' +
-            uvi +
+            UVI +
             '</span>'
         );
     })
 }
 
-//Function to retrieve 5-day Forecast data from Forecast API
+//Function to retrieve 5-day forecast data from Forecast API
 
-function retrieve5DayWeather(search) {
+function retrieve5DayWeather() {
+    let queryURLfor5DayWeather = oneCallAPI + lat + '&lon=' + lon + units + APIkey;
 
-}
+    $.ajax({
+        url: queryURLfor5DayWeather,
+        method: 'GET'
+    }).then(function(responseForecast) {
+        let forecasted = responseForecast;
+        for (var i = 0; i < 5; i++) {
+            let forecastDate = forecasted.daily[i].dt_txt;
+            let forecastDateFormatted = new Date(forecastDate).toLocaleDateString('en-AU');
+            let forecastImg = forecasted.daily[i].weather[0].icon;
+            let forecastImgRetrieved = getWeatherIcon + forecastImg + '.png';
+            let forecastTempMin = forecasted.daily[i].temp.min;
+            let forecastTempMax = forecasted.daily[i].temp.max;
+            let forecastHum = forecasted.daily[i].humidity;
+            let forecastUVI = forecasted.daily[i].uvi;
+
+            $('#day' + (i + 1) 'Date').text(forecastDateFormatted);
+            $('#day' + (i + 1) 'Img').attr('src', forecastImgRetrieved);
+            $('#day' + (i + 1) 'TempMin').text('Min Temp: ' + forecastTempMin + ' °C');
+            $('#day' + (i + 1) 'TempMax').text('Max Temp: ' + forecastTempMax + ' °C');
+            $('#day' + (i + 1) 'Hum').text('Humidity: ' + forecastHum + '%');
+            $('#day' + (i + 1) 'UVI').text('UVI: ' + forecastUVI);
+        }
+    });
+};
 
 //Function to detect current user geolocation
 
