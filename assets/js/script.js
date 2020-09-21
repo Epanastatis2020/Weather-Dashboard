@@ -65,8 +65,8 @@ function retrieveWeather(search) {
         $('#5dayDiv').show();
 
         let name = response.name;
-        let tempMin = Math.floor(response.main.temp_min);
-        let tempMax = Math.floor(response.main.temp_max);
+        let tempMin = Math.round(response.main.temp_min);
+        let tempMax = Math.round(response.main.temp_max);
         let hum = response.main.humidity;
         let ws = response.wind.speed;
         let date = new Date(response.dt * 1000).toLocaleDateString('en-AU');
@@ -123,22 +123,22 @@ function retrieve5DayWeather() {
         method: 'GET'
     }).then(function(responseForecast) {
         let forecasted = responseForecast;
-        for (var i = 0; i < 5; i++) {
-            let forecastDate = forecasted.daily[i].dt_txt;
-            let forecastDateFormatted = new Date(forecastDate).toLocaleDateString('en-AU');
+        for (var i = 1; i < 6; i++) {
+            let forecastDate = forecasted.daily[i].dt;
+            let forecastDateFormatted = new Date(forecastDate * 1000).toLocaleDateString('en-AU');
             let forecastImg = forecasted.daily[i].weather[0].icon;
             let forecastImgRetrieved = getWeatherIcon + forecastImg + '.png';
-            let forecastTempMin = forecasted.daily[i].temp.min;
-            let forecastTempMax = forecasted.daily[i].temp.max;
+            let forecastTempMin = Math.round(forecasted.daily[i].temp.min);
+            let forecastTempMax = Math.round(forecasted.daily[i].temp.max);
             let forecastHum = forecasted.daily[i].humidity;
             let forecastUVI = forecasted.daily[i].uvi;
 
-            $('#day' + (i + 1) 'Date').text(forecastDateFormatted);
-            $('#day' + (i + 1) 'Img').attr('src', forecastImgRetrieved);
-            $('#day' + (i + 1) 'TempMin').text('Min Temp: ' + forecastTempMin + ' °C');
-            $('#day' + (i + 1) 'TempMax').text('Max Temp: ' + forecastTempMax + ' °C');
-            $('#day' + (i + 1) 'Hum').text('Humidity: ' + forecastHum + '%');
-            $('#day' + (i + 1) 'UVI').text('UVI: ' + forecastUVI);
+            $('#day' + (i) + 'Date').text(forecastDateFormatted);
+            $('#day' + (i) + 'Img').attr('src', forecastImgRetrieved);
+            $('#day' + (i) + 'TempMin').text('Min Temp: ' + forecastTempMin + ' °C');
+            $('#day' + (i) + 'TempMax').text('Max Temp: ' + forecastTempMax + ' °C');
+            $('#day' + (i) + 'Hum').text('Humidity: ' + forecastHum + '%');
+            $('#day' + (i) + 'UVI').text('UVI: ' + forecastUVI);
         }
     });
 };

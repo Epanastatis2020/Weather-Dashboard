@@ -16,3 +16,7 @@ body {
   h6 {
       color: white;
   }
+
+  #todayWeatherDiv {
+      color: white;
+  }
