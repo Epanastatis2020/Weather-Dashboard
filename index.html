@@ -26,39 +26,7 @@
 
     <div class="container-fluid h-100">
       <div class="row min-vh-100">
-        <div class="col-md-4 bg-dark">
-          <div class="row">
-            <div class="col-md-12 py-3" id="current-location-container">
-              <div class="d-flex align-text-middle justify-content-between">
-                <h6 class="mt-2 font-weight-bold">
-                  Current Location Forecast:
-                </h6>
-                <button
-                  class="btn btn-success btn-sm"
-                  id="geolocationBtn"
-                >
-                  <i class="fas fa-map-marker-alt"></i>
-                  Get Location
-                </button>
-              </div>
-              <div
-                class="card text-white bg-secondary mt-3"
-                id="geolocationStatus"
-              >
-                <div class="card-body pt-2">
-                  <h5 class="card-title" id="geolocation"></h5>
-                  <div class="weather-image-container">
-                    <img
-                      alt="image shows a weather symbol for the current geolocation"
-                      id="geolocationImg"
-                    />
-                  </div>
-                  <p class="card-text" id="geolocationTemp"></p>
-                  <p class="card-text" id="geolocationHum"></p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="col-md-3 bg-dark">
           <div class="row">
             <div class="col-lg-8" id="searchDiv">
               <label class="font-weight-bold text-white pt-2" for="city-search"
@@ -90,14 +58,14 @@
                 class="d-flex justify-content-end pt-3"
                 id="clearDiv"
               >
-                <button class="btn btn-danger" id="clearBtn">
+                <button class="btn btn-outline-danger" id="clearBtn">
                   Clear History
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-8 px-4" id="weatherDiv">
+        <div class="col-md-9 px-4" id="weatherDiv">
           <div class="row pt-5" id="errorDiv">
             <h2 class="font-weight-bold text-white" id="errorDisplay">City not found.</h2>
           </div>

@@ -7,9 +7,6 @@ const units = '&units=metric';
 const getWeatherIcon = 'http://openweathermap.org/img/wn/';
 let city;
 let cityName;
-let country;
-let lat;
-let lon;
 
 //Document ready initialiser
 $(document).ready(function() {
@@ -21,6 +18,7 @@ $(document).ready(function() {
 
     //Event listeners
     $('#searchBtn').click(search);
+    $('#clearBtn').click(clearHistory);
 });
 
 
@@ -72,6 +70,13 @@ function retrieveWeather(search) {
         let date = new Date(response.dt * 1000).toLocaleDateString('en-AU');
         let weatherImg = response.weather[0].icon;
         let weatherImgURL = getWeatherIcon + weatherImg + '.png';
+
+        let savedJSONObject = {
+            name: name,
+            tempMin: tempMin,
+            tempMax: tempMax,
+            hum: hum,
+        }
         
         saveHistory(name);
 
@@ -82,22 +87,21 @@ function retrieveWeather(search) {
         $('#hum').html('<b>Humidity: </b>' + hum + '%');
         $('#ws').html('<b>Wind Speed: </b>' + ws + ' km/h');
 
-        lat = response.coord.lat;
-        lon = response.coord.lon;
+        let lat = response.coord.lat;
+        let lon = response.coord.lon;
         console.log(lat);
         console.log(lon);
         cityName = response.name;
-        country = response.sys.country;
-        
-        retrieveUVI(search);
-        retrieve5DayWeather(search);
+                
+        retrieveUVI(lat, lon, savedJSONObject);
+        retrieve5DayWeather(lat, lon);
     });
     
 };
 
 //Function to retrieve data from UVI API
 
-function retrieveUVI () {
+function retrieveUVI (lat, lon, savedJSONObject) {
     let queryURLforUVI = oneCallAPI + lat + '&lon=' + lon + APIkey;
 
     $.ajax({
@@ -109,13 +113,19 @@ function retrieveUVI () {
             '<b>UV Index: <b>' + '<span class="badge badge-pill badge-info">' +
             UVI +
             '</span>'
-        );
+        )
+        savedJSONObject = {
+
+            }
+        
+        return savedJSONObject;;
     })
+    
 }
 
 //Function to retrieve 5-day forecast data from Forecast API
 
-function retrieve5DayWeather() {
+function retrieve5DayWeather(lat, lon, savedJSONObject) {
     let queryURLfor5DayWeather = oneCallAPI + lat + '&lon=' + lon + units + APIkey;
 
     $.ajax({
@@ -123,6 +133,7 @@ function retrieve5DayWeather() {
         method: 'GET'
     }).then(function(responseForecast) {
         let forecasted = responseForecast;
+        let forecastArray = [];
         for (var i = 1; i < 6; i++) {
             let forecastDate = forecasted.daily[i].dt;
             let forecastDateFormatted = new Date(forecastDate * 1000).toLocaleDateString('en-AU');
@@ -139,11 +150,22 @@ function retrieve5DayWeather() {
             $('#day' + (i) + 'TempMax').text('Max Temp: ' + forecastTempMax + ' °C');
             $('#day' + (i) + 'Hum').text('Humidity: ' + forecastHum + '%');
             $('#day' + (i) + 'UVI').text('UVI: ' + forecastUVI);
+
+            forecastArray.push({
+                forecastDateFormatted: forecastDateFormatted,
+                forecastImgRetrieved: forecastImgRetrieved,
+                forecastTempMin: forecastTempMin,
+
+            }) 
+                
         }
+        
+        
+
+
+
     });
 };
-
-//Function to detect current user geolocation
 
 //Function to create history array
 
@@ -166,7 +188,7 @@ function showHistory() {
 //Function to clear search history
 
 function clearHistory() {
-
+    localStorage.clear();
 }
 
 //Function to retrieve forecast from history
