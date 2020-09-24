@@ -9,7 +9,7 @@ let city;
 let cityName;
 //Local storage variables
 let lastSearch;
-let lastFiveSearches;
+let lastFiveSearches = [];
 
 //Document ready initialiser
 $(document).ready(function () {
@@ -27,8 +27,9 @@ function init() {
     $("#todayForecast").hide();
     $("#fiveDayDiv").hide();
   } else {
-    retrieveForecast(lastSearch);
+    retrieveWeather(lastSearch);
     showHistory();
+    searchAgain();
   }
 }
 
@@ -41,14 +42,7 @@ function search(event) {
     return;
   }
   $("#searchInput").val("");
-  retrieveForecast(city);
-}
-
-//Retrieve forecast function
-
-function retrieveForecast(search) {
-  var result = retrieveWeather(search);
-  retrieveUVI;
+  retrieveWeather(city);
 }
 
 //Function to retrieve data from Weather API
@@ -92,24 +86,42 @@ function retrieveWeather(search) {
     let lon = response.coord.lon;
     cityName = response.name;
 
-    // saving search term to local Storage
-    let savedJSONObject = cityName;
-
-    localStorage.setItem("lastSearch", JSON.stringify(savedJSONObject));
-    lastFiveSearches = JSON.parse(
-      window.localStorage.getItem("lastFiveSearches")
-    );
-    if (lastFiveSearches === null) {
-      lastFiveSearches = [];
-    } else if (lastFiveSearches.length > 5) {
-      delete lastFiveSearches[4];
-    }
-    lastFiveSearches.push(savedJSONObject);
-    localStorage.setItem("lastFiveSearches", JSON.stringify(lastFiveSearches));
-
+    saveSearch(cityName);
     retrieveUVI(lat, lon);
     retrieve5DayWeather(lat, lon);
   });
+}
+
+//Function to save variables to localStorage
+
+function saveSearch(cityName) {
+  // saving search term to local Storage
+  let savedJSONObject = cityName;
+  localStorage.setItem("lastSearch", JSON.stringify(savedJSONObject));
+  saveLastSearches(savedJSONObject);
+}
+
+//Function to get the saved array and ensure it only holds 5 values
+
+function getSavedSearches() {
+  //getting array of searched cities from local storage
+  lastFiveSearches = JSON.parse(localStorage.getItem("lastFiveSearches"));
+  if (lastFiveSearches === null) {
+    lastFiveSearches = [];
+  }
+  if (lastFiveSearches.length > 4) {
+    lastFiveSearches.shift();
+  }
+  return lastFiveSearches;
+}
+
+//Function to save the updated array and push to local storage
+
+function saveLastSearches(savedJSONObject) {
+  let arrayInit = getSavedSearches();
+
+  arrayInit.push(savedJSONObject);
+  localStorage.setItem("lastFiveSearches", JSON.stringify(arrayInit));
 }
 
 //Function to retrieve data from UVI API
@@ -198,17 +210,23 @@ function retrieve5DayWeather(lat, lon) {
 //Function to show search history
 
 function showHistory() {
+  $("#searchHistoryList").empty();
   $("#searchHistoryList").show();
-  lastFiveSearches = JSON.parse(
-    window.localStorage.getItem("lastFiveSearches")
-  );
-  if (lastFiveSearches === null) {
-    lastFiveSearches = [];
-  }
+  lastFiveSearches =
+    JSON.parse(window.localStorage.getItem("lastFiveSearches")) || [];
   for (var i = 0; i < lastFiveSearches.length; i++) {
     let newListItem = $("<li>").text(lastFiveSearches[i]);
     $("#searchHistoryList").prepend(newListItem);
   }
+}
+
+//Function to display the weather for past searches
+
+function searchAgain() {
+  $("#searchHistoryList").on("click", "li", function () {
+    historicalSearch = $(this).text();
+    retrieveWeather(historicalSearch);
+  });
 }
 
 //Function to clear search history
