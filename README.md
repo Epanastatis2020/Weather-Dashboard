@@ -1,8 +1,16 @@
 # Weather-Dashboard
 
-Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+This is a simple weather dashboard which allows the user to input a city, and receive the current and 5-day forecast weather data for that city.
 
-Use the [OpenWeather API](https://openweathermap.org/api) to retrieve weather data for cities. The documentation includes a section called "How to start" that will provide basic setup and usage instructions. Use `localStorage` to store any persistent data.
+The application saves the past 5 searches so the user can quickly refer to them in subsequent days and see the updated forecast.
+
+This has been achieved using the [OpenWeather API](https://openweathermap.org/api).
+
+## Contents
+
+<p>
+The app is composed of 1 page, index.html. It includes a javascript file sciprt.js, which provides all the functionality. There is also a style.css sheet which provides minimal auxiliary styling, as most of the styling is done via Bootstrap.
+</p>
 
 ## User Story
 
@@ -30,17 +38,54 @@ WHEN I open the weather dashboard
 THEN I am presented with the last searched city forecast
 ```
 
-The following image demonstrates the application functionality:
+## Built With
 
-![weather dashboard demo](./Assets/06-server-side-apis-homework-demo.png)
+​
 
-## Review
+- [VScode](https://code.visualstudio.com/) - The editor of choice
+- [Git for Windows](https://gitforwindows.org/) - Brings the full feature set of Git SCM to Windows
+- [jQuery](https://jquery.com/) - jQuery is a fast, small, and feature-rich JavaScript library.
+- [Bootstrap](https://getbootstrap.com/) - The world’s most popular front-end open source toolkit
+- [FontAwesome](https://fontawesome.com/) - The web's most popular icon set and toolkit.
+- [OpenWeather API](https://openweathermap.org/api) - Weather forecasts, nowcasts and history in fast and elegant way.
+  ​
 
-You are required to submit the following for review:
+## Summary of project
 
-* The URL of the deployed application.
+In this assignment, we were tasked to create a weather dashboard that would dynamically update the page with live weather data for a location of the user's choice.
 
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+Surprisingly the OpenWeather API itself was very straightfoward and didn't really pose any issues - rather the challenge lay in passing the necessary returned values around in order to ensure the required functionality was met.
 
-- - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+I used Bootstrap to style the app as this gave me an acceptable aesthetic while not consuming a lot of time or effort. I also used FontAwesome icons as my save and delete buttons.
+
+In the future, I would like to update the app so that the background changes based on the weather conditions for the current searched city.
+
+## Screenshots
+
+![Weather Dashboard Landing Page](https://user-images.githubusercontent.com/65388616/94100462-17aa0780-fe71-11ea-8cf2-e257d2987774.png)
+
+![Weather Dashboard Searches](https://user-images.githubusercontent.com/65388616/94100430-f812df00-fe70-11ea-9aec-b423dc261c1d.png)
+
+![Weather Dashboard Dynamic UVI Colouring](https://user-images.githubusercontent.com/65388616/94100500-301a2200-fe71-11ea-8dd5-4c995e829809.png)
+
+## Licence
+
+​
+No licence was required for this project.
+​
+
+## Link to the site
+
+<a href="https://epanastatis2020.github.io/Weather-Dashboard/">Please visit the site on GitHub Pages</a>
+
+## Acknowledgements
+
+AskBCS was of assistance multiple times during this project, and I really appreciated their speedy responses to my questions.
+
+## Authors
+
+​
+
+- **CON ANGELAKIS** -
+  github.com/Epanastatis2020
+  con.angelakis@gmail.com

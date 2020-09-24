@@ -119,9 +119,12 @@ function getSavedSearches() {
 
 function saveLastSearches(savedJSONObject) {
   let arrayInit = getSavedSearches();
-
-  arrayInit.push(savedJSONObject);
-  localStorage.setItem("lastFiveSearches", JSON.stringify(arrayInit));
+  if (arrayInit.includes(savedJSONObject) === false) {
+    arrayInit.push(savedJSONObject);
+    localStorage.setItem("lastFiveSearches", JSON.stringify(arrayInit));
+  } else {
+    return;
+  }
 }
 
 //Function to retrieve data from UVI API
@@ -215,7 +218,9 @@ function showHistory() {
   lastFiveSearches =
     JSON.parse(window.localStorage.getItem("lastFiveSearches")) || [];
   for (var i = 0; i < lastFiveSearches.length; i++) {
-    let newListItem = $("<li>").text(lastFiveSearches[i]);
+    let newListItem = $("<button>")
+      .text(lastFiveSearches[i])
+      .attr("class", "list-group-item list-group-item-action");
     $("#searchHistoryList").prepend(newListItem);
   }
 }
@@ -223,7 +228,7 @@ function showHistory() {
 //Function to display the weather for past searches
 
 function searchAgain() {
-  $("#searchHistoryList").on("click", "li", function () {
+  $("#searchHistoryList").on("click", "button", function () {
     historicalSearch = $(this).text();
     retrieveWeather(historicalSearch);
   });
