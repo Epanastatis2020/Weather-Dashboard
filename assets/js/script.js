@@ -1,5 +1,6 @@
 //Declare global variables here
-const APIkey = "&appid=4d90ce9f0a7bd1882a4f86d3d0c1088b";
+//const APIkey = "&appid=4d90ce9f0a7bd1882a4f86d3d0c1088b";
+const APIkey = "&appid=3cfd0e2430b4430d35b82d3639cf3aea";
 const weatherAPI = "https://api.openweathermap.org/data/2.5/weather?";
 const oneCallAPI = "https://api.openweathermap.org/data/2.5/onecall?lat=";
 const geoAPI = navigator.geolocation;
@@ -29,7 +30,6 @@ function init() {
   } else {
     retrieveWeather(lastSearch);
     showHistory();
-    searchAgain();
   }
 }
 
@@ -208,7 +208,6 @@ function retrieve5DayWeather(lat, lon) {
     }
   });
   showHistory();
-  searchAgain();
 }
 
 //Function to show search history
@@ -224,15 +223,18 @@ function showHistory() {
       .attr("class", "list-group-item list-group-item-action");
     $("#searchHistoryList").prepend(newListItem);
   }
+  searchAgain();
 }
 
 //Function to display the weather for past searches
 
 function searchAgain() {
-  $("#searchHistoryList").on("click", "button", function () {
-    historicalSearch = $(this).text();
-    retrieveWeather(historicalSearch);
-  });
+  $("#searchHistoryList")
+    .off("click")
+    .on("click", "button", function () {
+      historicalSearch = $(this).text();
+      retrieveWeather(historicalSearch);
+    });
 }
 
 //Function to clear search history
