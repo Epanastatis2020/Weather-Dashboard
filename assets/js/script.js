@@ -208,6 +208,7 @@ function retrieve5DayWeather(lat, lon) {
     }
   });
   showHistory();
+  searchAgain();
 }
 
 //Function to show search history
