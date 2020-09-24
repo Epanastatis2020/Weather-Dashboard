@@ -15,19 +15,26 @@ let lastFiveSearches;
 $(document).ready(function () {
   init();
 
-  function init() {
-    $("#errorDiv").hide();
-    $("#todayForecast").hide();
-    $("#5dayDiv").hide();
-  }
-
   //Event listeners
   $("#searchBtn").click(search);
   $("#clearBtn").click(clearHistory);
 });
 
+function init() {
+  lastSearch = JSON.parse(window.localStorage.getItem("lastSearch"));
+  if (lastSearch === null) {
+    $("#errorDiv").hide();
+    $("#todayForecast").hide();
+    $("#fiveDayDiv").hide();
+  } else {
+    retrieveForecast(lastSearch);
+    showHistory();
+  }
+}
+
 //Search function
-function search() {
+function search(event) {
+  event.preventDefault();
   city = $("#searchInput").val().trim();
 
   if (city === "") {
@@ -57,13 +64,13 @@ function retrieveWeather(search) {
       404: function () {
         $("#errorDiv").show();
         $("#todayForecast").hide();
-        $("#5dayDiv").hide();
+        $("#fiveDayDiv").hide();
       },
     },
   }).then(function (response) {
     $("#errorDiv").hide();
     $("#todayForecast").show();
-    $("#5dayDiv").show();
+    $("#fiveDayDiv").show();
 
     let name = response.name;
     let tempMin = Math.round(response.main.temp_min);
@@ -73,8 +80,6 @@ function retrieveWeather(search) {
     let date = new Date(response.dt * 1000).toLocaleDateString("en-AU");
     let weatherImg = response.weather[0].icon;
     let weatherImgURL = getWeatherIcon + weatherImg + ".png";
-
-    saveHistory(name);
 
     $("#cityNameDisplay").text(name + " (" + date + ") ");
     $("#weatherImg").attr("src", weatherImgURL);
@@ -88,9 +93,7 @@ function retrieveWeather(search) {
     cityName = response.name;
 
     // saving search term to local Storage
-    let savedJSONObject = {
-      name: cityName,
-    };
+    let savedJSONObject = cityName;
 
     localStorage.setItem("lastSearch", JSON.stringify(savedJSONObject));
     lastFiveSearches = JSON.parse(
@@ -98,6 +101,8 @@ function retrieveWeather(search) {
     );
     if (lastFiveSearches === null) {
       lastFiveSearches = [];
+    } else if (lastFiveSearches.length > 5) {
+      delete lastFiveSearches[4];
     }
     lastFiveSearches.push(savedJSONObject);
     localStorage.setItem("lastFiveSearches", JSON.stringify(lastFiveSearches));
@@ -117,12 +122,42 @@ function retrieveUVI(lat, lon) {
     method: "GET",
   }).then(function (responseUVI) {
     let UVI = responseUVI.current.uvi;
-    $("#uvi").html(
-      "<b>UV Index: <b>" +
-        '<span class="badge badge-pill badge-info">' +
-        UVI +
-        "</span>"
-    );
+    if (UVI < 3) {
+      $("#uvi").html(
+        "<b>UV Index: <b>" +
+          '<span class="badge badge-pill badge-success">' +
+          UVI +
+          "</span>"
+      );
+    } else if (UVI < 6) {
+      $("#uvi").html(
+        "<b>UV Index: <b>" +
+          '<span class="badge badge-pill YellowUVI">' +
+          UVI +
+          "</span>"
+      );
+    } else if (UVI < 8) {
+      $("#uvi").html(
+        "<b>UV Index: <b>" +
+          '<span class="badge badge-pill badge-warning">' +
+          UVI +
+          "</span>"
+      );
+    } else if (UVI < 11) {
+      $("#uvi").html(
+        "<b>UV Index: <b>" +
+          '<span class="badge badge-pill badge-danger">' +
+          UVI +
+          "</span>"
+      );
+    } else if (UVI >= 11) {
+      $("#uvi").html(
+        "<b>UV Index: <b>" +
+          '<span class="badge badge-pill PurpleUVI">' +
+          UVI +
+          "</span>"
+      );
+    }
   });
 }
 
@@ -157,25 +192,29 @@ function retrieve5DayWeather(lat, lon) {
       $("#day" + i + "UVI").text("UVI: " + forecastUVI);
     }
   });
+  showHistory();
 }
 
 //Function to show search history
 
 function showHistory() {
-    lastFiveSearches = JSON.parse(
-        window.localStorage.getItem("lastFiveSearches")
-      );
-      if (lastFiveSearches === null) {
-        lastFiveSearches = [];
-      }
-    for (var i = 0; i < 6, i++) {
-        let newListItem = $("<li>").text(lastFiveSearches[i]);
-        $("#searchHistoryList").prepend(newListItem);
-    }
+  $("#searchHistoryList").show();
+  lastFiveSearches = JSON.parse(
+    window.localStorage.getItem("lastFiveSearches")
+  );
+  if (lastFiveSearches === null) {
+    lastFiveSearches = [];
+  }
+  for (var i = 0; i < lastFiveSearches.length; i++) {
+    let newListItem = $("<li>").text(lastFiveSearches[i]);
+    $("#searchHistoryList").prepend(newListItem);
+  }
 }
 
 //Function to clear search history
 
-function clearHistory() {
+function clearHistory(event) {
+  event.preventDefault();
   localStorage.clear();
+  $("#searchHistoryList").hide();
 }

@@ -1,22 +1,47 @@
 /* Background image (free use) */
 body {
-    background-image: url('../images/background.jpg');
-    background-repeat: no-repeat;
-    background-size: initial;
+  background-image: url("../images/background.jpg");
+  background-repeat: no-repeat;
+  background-size: initial;
 }
 
 /* Footer styling*/
 #footer-container {
-    background-color: #343a40;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
+  background-color: #343a40;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 
-  h6 {
-      color: white;
-  }
+h6 {
+  color: white;
+}
 
-  #todayWeatherDiv {
-      color: white;
-  }
+#todayWeatherDiv {
+  color: white;
+}
+
+#errorDiv {
+  display: none;
+}
+
+#todayForecast {
+  display: none;
+}
+
+#fiveDayDiv {
+  display: none;
+}
+
+.PurpleUVI {
+  background-color: purple;
+}
+
+.YellowUVI {
+  background-color: yellow;
+  color: black;
+}
+
+#showHistoryList {
+  display: none;
+}
