@@ -1,6 +1,5 @@
 //Declare global variables here
-//const APIkey = "&appid=4d90ce9f0a7bd1882a4f86d3d0c1088b";
-const APIkey = "&appid=3cfd0e2430b4430d35b82d3639cf3aea";
+const APIkey = "&appid=4d90ce9f0a7bd1882a4f86d3d0c1088b";
 const weatherAPI = "https://api.openweathermap.org/data/2.5/weather?";
 const oneCallAPI = "https://api.openweathermap.org/data/2.5/onecall?lat=";
 const geoAPI = navigator.geolocation;
